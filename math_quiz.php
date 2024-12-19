@@ -71,3 +71,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_quiz'])) {
     list($num1, $num2, $symbol, $answer, $choices) = generateQuestion($_SESSION['level'], $_SESSION['operator']);
     $_SESSION['current_question'] = [$num1, $num2, $symbol, $answer, $choices];
 }
+
+// Handle submitting an answer
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_answer'])) {
+    // Check if the user's answer is correct
+    $correctAnswer = $_POST['correct_answer'];
+    $userAnswer = $_POST['answer'];
+
+    if ($userAnswer == $correctAnswer) {
+        $_SESSION['score_correct']++;
+    } else {
+        $_SESSION['score_wrong']++;
+    }
+
+    // Generate the next question
+    list($num1, $num2, $symbol, $answer, $choices) = generateQuestion($_SESSION['level'], $_SESSION['operator']);
+    $_SESSION['current_question'] = [$num1, $num2, $symbol, $answer, $choices];
+}
+
