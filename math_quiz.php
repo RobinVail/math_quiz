@@ -53,3 +53,21 @@ function generateQuestion($level, $operator) {
     // Return the question components
     return [$num1, $num2, $symbol, $answer, $choices];
 }
+
+// Handle starting the quiz
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_quiz'])) {
+    // Reset the scores
+    $_SESSION['score_correct'] = 0;
+    $_SESSION['score_wrong'] = 0;
+
+    // Save quiz settings in the session
+    $_SESSION['level'] = $_POST['level'];
+    $_SESSION['operator'] = $_POST['operator'];
+    $_SESSION['num_items'] = $_POST['num_items'];
+    $_SESSION['custom_min'] = $_POST['custom_min'] ?? null;
+    $_SESSION['custom_max'] = $_POST['custom_max'] ?? null;
+
+    // Generate the first question
+    list($num1, $num2, $symbol, $answer, $choices) = generateQuestion($_SESSION['level'], $_SESSION['operator']);
+    $_SESSION['current_question'] = [$num1, $num2, $symbol, $answer, $choices];
+}
